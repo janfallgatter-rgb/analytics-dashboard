@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produktivitäts-Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' },
+                        accent: { 500: '#6366f1', 400: '#818cf8' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body class="bg-gray-100 dark:bg-dark-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
+    <div id="app" class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside :class="[
+            'fixed inset-y-0 left-0 z-50 w-64 glass-dark transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-auto',
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        ]">
+            <div class="flex flex-col h-full p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-2xl font-bold gradient-text">Productivity</h1>
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <nav class="flex-1 space-y-2">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 bg-accent-500/20 text-accent-400 rounded-xl transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="9" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="9" x="3" y="12" rx="1"/></svg>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                </nav>
+
+                <div class="mt-auto pt-6 border-t border-gray-700/50">
+                    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-800/50">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500 to-purple-500 flex items-center justify-center text-white font-bold">JD</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium truncate">John Doe</p>
+                            <p class="text-xs text-gray-400 truncate">Senior Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="glass dark:glass-dark border-b border-gray-700/50 px-6 py-4">
+                <div class="flex items-center justify-between gap-4">
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+
+                    <div class="flex-1 max-w-xl">
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            <input v-model="searchQuery" type="text" placeholder="Suche nach Aufgaben oder Kategorien..." class="w-full pl-10 pr-4 py-2.5 bg-gray-800/50 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500/50 text-sm"/>
+                        </div>
+                    </div>
+
+                    <button @click="toggleDarkMode" class="p-2.5 rounded-xl bg-gray-800/50 border border-gray-700 text-yellow-400 hover:bg-gray-700/50 transition-colors">
+                        <svg v-if="darkMode" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass dark:glass-dark rounded-2xl p-6 hover-lift card-gradient">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-400">Gesamtstunden</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <p class="text-3xl font-bold gradient-text">{{ stats.totalHours }}</p>
+                        <p class="text-sm text-gray-400 mt-1">{{ stats.totalTasks }} Aufgaben</p>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 hover-lift card-gradient">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-400">Aktive Aufgaben</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <p class="text-3xl font-bold gradient-text">{{ stats.totalTasks }}</p>
+                        <p class="text-sm text-gray-400 mt-1">In diesem Zeitraum</p>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 hover-lift card-gradient">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-400">Durchschnitt</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <p class="text-3xl font-bold gradient-text">{{ (stats.totalTime / stats.totalTasks).toFixed(0) }}m</p>
+                        <p class="text-sm text-gray-400 mt-1">Pro Aufgabe</p>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 hover-lift card-gradient">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-400">Kategorien</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <p class="text-3xl font-bold gradient-text">{{ Object.keys(stats.categoryStats).length }}</p>
+                        <p class="text-sm text-gray-400 mt-1">Verschiedene Bereiche</p>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient">
+                        <h3 class="text-lg font-semibold mb-4">Stunden pro Kategorie</h3>
+                        <div class="chart-container"><canvas id="categoryHoursChart"></canvas></div>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient">
+                        <h3 class="text-lg font-semibold mb-4">Anzahl Aufgaben pro Kategorie</h3>
+                        <div class="chart-container"><canvas id="categoryCountChart"></canvas></div>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient">
+                        <h3 class="text-lg font-semibold mb-4">Tägliche Produktivität</h3>
+                        <div class="chart-container"><canvas id="timeSeriesChart"></canvas></div>
+                    </div>
+
+                    <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient">
+                        <h3 class="text-lg font-semibold mb-4">Top 5 Längste Aufgaben</h3>
+                        <div class="chart-container"><canvas id="topTasksChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Top Tasks Table -->
+                <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient">
+                    <h3 class="text-lg font-semibold mb-4">Detailierte Aufgabenliste</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-700/50">
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Aufgabe</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Datum</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Kategorie</th>
+                                    <th class="text-right py-3 px-4 text-sm font-medium text-gray-400">Dauer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="task in stats.topTasks" :key="task.id" class="border-b border-gray-700/30 hover:bg-white/5 transition-colors">
+                                    <td class="py-4 px-4 text-sm">{{ task.aufgabe }}</td>
+                                    <td class="py-4 px-4 text-sm">{{ formatDate(task.datum) }}</td>
+                                    <td class="py-4 px-4">
+                                        <span :class="['inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium', 'bg-' + getBgColor(task.kategorie) + '-500/20 text-' + getCategoryColor(task.kategorie)]">
+                                            <span class="w-2 h-2 rounded-full" :style="{ backgroundColor: getCategoryColor(task.kategorie) }"></span>
+                                            {{ task.kategorie }}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-right">{{ (task.dauer / 60).toFixed(1) }}h</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Team Productivity -->
+                <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient mt-8">
+                    <h3 class="text-lg font-semibold mb-4">Team Produktivität</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="text-center p-4 rounded-xl bg-white/5">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">AS</div>
+                            <p class="font-medium">Alex Schmidt</p>
+                            <p class="text-sm text-gray-400">12.5h heute</p>
+                        </div>
+                        <div class="text-center p-4 rounded-xl bg-white/5">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">MK</div>
+                            <p class="font-medium">Maria Klein</p>
+                            <p class="text-sm text-gray-400">10.2h heute</p>
+                        </div>
+                        <div class="text-center p-4 rounded-xl bg-white/5">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">TB</div>
+                            <p class="font-medium">Tom Bauer</p>
+                            <p class="text-sm text-gray-400">14.8h heute</p>
+                        </div>
+                        <div class="text-center p-4 rounded-xl bg-white/5">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-500 mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">SL</div>
+                            <p class="font-medium">Sarah Lehmann</p>
+                            <p class="text-sm text-gray-400">9.7h heute</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Activities -->
+                <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient mt-8">
+                    <h3 class="text-lg font-semibold mb-4">Aktuelle Aktivitäten</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
+                            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">API Integration abgeschlossen</p>
+                                <p class="text-sm text-gray-400">Vor 15 Minuten</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2.5h</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
+                            <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="9" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="9" x="3" y="12" rx="1"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Dashboard Design Review</p>
+                                <p class="text-sm text-gray-400">Vor 32 Minuten</p>
+                            </div>
+                            <span class="text-xs text-gray-400">1.2h</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
+                            <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Sprint Planning Meeting</p>
+                                <p class="text-sm text-gray-400">Vor 1 Stunde</p>
+                            </div>
+                            <span class="text-xs text-gray-400">1.0h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Access -->
+                <div class="glass dark:glass-dark rounded-2xl p-6 card-gradient mt-8">
+                    <h3 class="text-lg font-semibold mb-4">Schnellzugriff</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button class="p-4 rounded-xl bg-gradient-to-br from-accent-500 to-purple-600 text-white hover:opacity-90 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="9" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="9" x="3" y="12" rx="1"/></svg>
+                            <p class="font-medium mt-2">Neues Dashboard</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white hover:opacity-90 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <p class="font-medium mt-2">Aufgabe erstellen</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white hover:opacity-90 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <p class="font-medium mt-2">Team ansehen</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 text-white hover:opacity-90 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <p class="font-medium mt-2">Report exportieren</p>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div v-if="sidebarOpen" @click="toggleSidebar" class="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"></div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="/src/main.js"></script>
+</body>
+</html>
