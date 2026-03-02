@@ -2,15 +2,12 @@
 
 > A productivity analytics dashboard generated entirely by **Qwen3.5-27b** running locally — created as an LLM performance test.
 
-![Screenshot](https://raw.githubusercontent.com/janfallgatter-rgb/analytics-dashboard/main/assets/preview.png)
-
 ## About
 
 This project was generated in a single prompt session using the **Qwen3.5-27b** large language model running locally (via Ollama / llama.cpp). It serves as a benchmark to evaluate the code quality, design coherence, and feature completeness achievable by a locally hosted open-source LLM.
 
 The dashboard visualizes team productivity data across 7 categories with interactive charts, search, and dark/light mode — all without a build step.
 
-> **Benchmark observation:** The prompt required a 5×5 navigation hierarchy with 25 distinct data widgets, a data generation script, and config file persistence. Qwen3.5-27b produced a working single-page dashboard with charts and search — functionally solid, but it did not implement the full 5×5 navigation structure or the autonomous data generation phase. The gap between the specification and the output is itself a meaningful data point in the performance evaluation.
 
 ## The Original Prompt
 
