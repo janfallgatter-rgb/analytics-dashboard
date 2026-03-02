@@ -17,57 +17,53 @@ The following prompt was submitted verbatim to Qwen3.5-27b (locally hosted). Thi
 <summary>Show full prompt</summary>
 
 ```
-TASK: Autonomous Visual Dashboard with 5x5 Hierarchy & Mock Data
+TASK: Autonomous Visual Data Dashboard Development
+Du bist ein Senior Software Engineer Agent mit vollem Zugriff auf das lokale Dateisystem (via MCP/Shell). Dein Ziel ist es, eine funktionsfähige, visuell beeindruckende Single-Page-Browser-App (Dashboard) autonom zu entwickeln und im aktuellen Verzeichnis zu speichern.
 
-Du bist ein Senior Software Engineer Agent mit vollem Zugriff auf das
-lokale Dateisystem (via MCP/Shell). Dein Ziel ist es, eine
-funktionsfähige, visuell beeindruckende Single-Page-App autonom zu
-entwickeln, die eine strikte hierarchische Navigation besitzt und mit
-selbst generierten Daten gefüllt ist.
+1. TECHNISCHER STACK (Vorgabe)
+Framework: Vanilla JS oder React (Vite-Setup, falls npm verfügbar).
 
-1. PHASE 1: DATEN-GENERIERUNG (Zwingend)
-Erstelle ein Skript (Python oder JS), das eine Datei
-data/analytics_core.json erzeugt.
+Styling: Tailwind CSS v4 (CDN-Link für schnelles Prototyping erlaubt).
 
-Die Daten müssen mindestens 150 realistische Datensätze für 5
-verschiedene Geschäftsbereiche enthalten.
+Icons: Lucide-Icons (via CDN/ESM).
 
-Führe das Skript autonom aus, bevor du mit dem UI beginnst.
+Charts: Chart.js oder Recharts.
 
-2. PHASE 2: STRUKTURELLE ANFORDERUNG (Die "5x5" Regel)
-Implementiere ein Navigationssystem mit exakt zwei Ebenen:
+2. ORDNERSTRUKTUR
+Erstelle zwingend folgende Struktur im Verzeichnis ./analytics-dashboard:
 
-  Ebene 1 (Sidebar): 5 Hauptmenüpunkte
-  (z.B. Dashboard, Sales, Team, Infrastructure, Reports).
+/src (HTML, JS, CSS)
 
-  Ebene 2 (Content): Jeder der 5 Hauptpunkte muss beim Anklicken 5
-  spezifische Untersektionen oder Daten-Karten laden
-  (insgesamt 25 Unterelemente).
+/data (Hier sollst du eine raw_data.json mit 50 fiktiven Datensätzen generieren)
 
-  Jede Untersektion muss eine eigene kleine Visualisierung oder ein
-  Daten-Widget aus der JSON-Datei enthalten.
+/assets (Stylesheets/Bilder)
 
-3. TECHNISCHER STACK & STYLING
-  Framework: Vanilla JS oder React (Vite). Styling: Tailwind CSS v4.
-  Charts: Chart.js oder Recharts.
-  Design: "Professional Dark Mode". Nutze Indigo-Akzente,
-  Glasmorphismus (backdrop-blur) und XL-Corners für die Karten.
+3. FUNKTIONALE ANFORDERUNGEN
+Generiere zuerst eine JSON-Datei mit fiktiven "Produktivitäts-Daten" (Datum, Aufgabe, Dauer, Kategorie).
 
-4. DATEISYSTEM-INTERAKTION
-  Erstelle die Ordnerstruktur: /src, /data, /config.
-  Speichere die App-Konfiguration (aktueller Tab, Farb-Präferenz) in
-  einer lokalen config/app_state.json. Die App muss diese Datei beim
-  Laden auslesen.
+Erstelle ein Dashboard, das diese JSON einliest und visualisiert.
 
-5. AUTONOMIE-REGELN
-  Nutze deine Tools (write_to_file, execute_command), um alles ohne
-  meine Hilfe aufzubauen.
-  Korrigiere Pfadfehler oder Syntaxprobleme selbstständig durch
-  Analyse der Fehlermeldungen.
-  Melde erst Vollzug, wenn die index.html fertig ist und alle 30
-  Navigationsknoten (5x5 + Main) funktionieren.
+Implementiere ein "Dark Mode"-Toggle, das die Einstellung in einer lokalen settings.json speichert und beim Laden wieder ausliest.
 
-START JETZT MIT DER ORDNERSTRUKTUR UND DEM DATENSKRIPT.
+Das Dashboard muss eine Sidebar, eine Top-Nav und ein Grid aus mindestens 4 Chart-Karten enthalten.
+
+4. VISUELLE ANFORDERUNGEN ("Visually Appealing")
+Nutze moderne Design-Prinzipien: Große Abstände (Gaps), abgerundete Ecken (XL-Corners), subtile Schatten und Glasmorphismus-Effekte.
+
+Verwende eine professionelle Farbpalette (z.B. Slate-900 für Background, Indigo-500 für Akzente).
+
+Die App muss voll responsiv sein.
+
+5. AUTONOMIE-REGELN (Wichtig!)
+Nutze deine Tools (write_to_file, make_directory, execute_command), um das Projekt ohne meine Hilfe aufzubauen.
+
+Falls Fehler auftreten (Syntax, fehlende Dateien), korrigiere sie selbstständig durch Analyse der Logs oder Testläufe.
+
+Gib mir erst Bescheid, wenn die index.html fertig ist und im Browser geöffnet werden kann.
+
+ANTWORTE NICHT MIT "Ich werde...", sondern beginne sofort mit dem ersten Schritt (Ordnererstellung).
+
+START JETZT.
 ```
 
 </details>
